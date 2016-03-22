@@ -10,25 +10,25 @@ require(__dirname + '/../server');
 
 
 describe('testing express_middleware', () => {
-  it('POST should post new data to /unicorns', (done)=>{
-    request('localhost:3000')
-    .post('/api/unicorns')
-    .send({})
-    .end((err, res) =>{
+  it('should parse incoming data from json', (done)=>{
+    request('localhost:5000')
+    .post('/unicorns')
+    .send({name: 'Henry'})
+    .end((err, req) =>{
       expect(err).to.eql(null);
-      expect(res).to.have.status(200);
+      expect(req.body).to.be.a('object');
+      expect(req).to.be.status(200);
       done();
     });
   });
-  it('GET should receive the /unicorns data', (done)=>{
-    request('localhost:3000')
-    .get('/api/unicorns')
-    .end(function(err, res) {
+  it('should post the /unicorns data', (done)=>{
+    request('localhost:5000')
+    .post('/unicorns')
+    .send({id: '002'})
+    .end((err, res) =>{
       expect(err).to.eql(null);
       expect(res).to.be.status(200);
-      console.log(res.body);
-      expect(res.body).to.exist;
-      expect(Array.isArray(res.body.data)).to.be.true;
+      expect(Array.isArray(res.body)).to.eql(false);
       done();
 
     });
